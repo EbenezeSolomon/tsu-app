@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../models/models.dart';
 import 'dashboard_screen.dart';
 
@@ -15,13 +16,35 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _error;
 
   void _login() async {
-    final username = await AdminCredentials.getUsername() ?? 'admin';
-    final password = await AdminCredentials.getPassword() ?? 'admin123';
-    if (_usernameController.text == username && _passwordController.text == password) {
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+    // Check admin credentials
+    final adminUsername = await AdminCredentials.getUsername() ?? 'admin';
+    final adminPassword = await AdminCredentials.getPassword() ?? 'admin123';
+    if (username == adminUsername && password == adminPassword) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => DashboardScreen(lecturerUsername: _usernameController.text),
+          builder: (context) => DashboardScreen(lecturerUsername: username),
+        ),
+      );
+      return;
+    }
+    // Check lecturer credentials
+    final lecturerBox = await Hive.openBox<Lecturer>('lecturers');
+    Lecturer? lecturer;
+    try {
+      lecturer = lecturerBox.values.firstWhere(
+        (l) => l.username == username && l.passwordHash == password,
+      );
+    } catch (e) {
+      lecturer = null;
+    }
+    if (lecturer != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DashboardScreen(lecturerUsername: lecturer!.username),
         ),
       );
     } else {

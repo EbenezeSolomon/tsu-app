@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import '../models/models.dart';
 
 class LecturerSignupScreen extends StatefulWidget {
   const LecturerSignupScreen({super.key});
@@ -15,13 +17,29 @@ class _LecturerSignupScreenState extends State<LecturerSignupScreen> {
   String? _error;
 
   void _signup() async {
-    // TODO: Save lecturer to Hive and navigate to login
-    Navigator.pop(context, {
-      'username': _usernameController.text,
-      'password': _passwordController.text,
-      'name': _nameController.text,
-      'department': _departmentController.text,
-    });
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+    final name = _nameController.text.trim();
+    final department = _departmentController.text.trim();
+    if (username.isEmpty || password.isEmpty || name.isEmpty || department.isEmpty) {
+      setState(() => _error = 'All fields are required.');
+      return;
+    }
+    final lecturerBox = Hive.box<Lecturer>('lecturers');
+    if (lecturerBox.values.any((l) => l.username == username)) {
+      setState(() => _error = 'Username already exists.');
+      return;
+    }
+    final lecturer = Lecturer(
+      username: username,
+      name: name,
+      department: department,
+      passwordHash: password, // For demo, store plain. Use hash in production.
+    );
+    await lecturerBox.add(lecturer);
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override
