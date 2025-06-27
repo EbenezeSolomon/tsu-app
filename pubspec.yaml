@@ -71,7 +71,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/fingerprint.svg
+    - C:\Users\FATIMAH MIJINYAWA\Desktop\New folder\tsu_app\assets
 
   # To add assets to your application, add an assets section, like this:
   # assets:
