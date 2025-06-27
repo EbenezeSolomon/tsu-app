@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../models/models.dart';
-import 'dashboard_screen.dart';
+import 'admin_dashboard_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class AdminLoginScreen extends StatefulWidget {
+  const AdminLoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<AdminLoginScreen> createState() => _AdminLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _AdminLoginScreenState extends State<AdminLoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _error;
@@ -21,12 +21,12 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => DashboardScreen(lecturerUsername: _usernameController.text),
+          builder: (context) => const AdminDashboardScreen(),
         ),
       );
     } else {
       setState(() {
-        _error = 'Invalid credentials';
+        _error = 'Invalid admin credentials';
       });
     }
   }
@@ -55,27 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   Image.asset('assets/Logo.png', height: 80),
                   const SizedBox(height: 16),
                   const Text(
-                    'Taraba State University Jalingo',
+                    'Admin Login',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Faculty of Science',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Biological Sciences Department.',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
                   TextField(
                     controller: _usernameController,
                     decoration: InputDecoration(
-                      labelText: 'Username',
+                      labelText: 'Admin Username',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
                       fillColor: Colors.white,
@@ -85,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextField(
                     controller: _passwordController,
                     decoration: InputDecoration(
-                      labelText: 'Password',
+                      labelText: 'Admin Password',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
                       fillColor: Colors.white,
@@ -107,51 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         backgroundColor: Color(0xFF4B79A1),
                       ),
                       onPressed: _login,
-                      label: const Text('Login', style: TextStyle(fontSize: 16)),
+                      label: const Text('Login as Admin', style: TextStyle(fontSize: 16)),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () async {
-                          final result = await Navigator.pushNamed(context, '/signup');
-                          if (result is Map) {
-                            await AdminCredentials.save(result['username'], result['password']);
-                            setState(() {});
-                          }
-                        },
-                        child: const Text('Sign up as Admin'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          final username = await AdminCredentials.getUsername() ?? 'admin';
-                          final result = await Navigator.pushNamed(context, '/change-password', arguments: username);
-                          if (result is String) {
-                            await AdminCredentials.setPassword(result);
-                          }
-                        },
-                        child: const Text('Change Password'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          final username = await AdminCredentials.getUsername() ?? 'admin';
-                          final result = await Navigator.pushNamed(context, '/change-username', arguments: username);
-                          if (result is String) {
-                            await AdminCredentials.setUsername(result);
-                          }
-                        },
-                        child: const Text('Change Username'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/admin-login');
-                    },
-                    child: const Text('Login as Admin'),
                   ),
                 ],
               ),

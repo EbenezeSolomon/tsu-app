@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/models.dart';
 import 'screens/login_screen.dart';
-import 'screens/dashboard_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/change_password_screen.dart';
 import 'screens/change_username_screen.dart';
+import 'screens/admin_login_screen.dart';
+import 'screens/admin_dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,10 +38,11 @@ class TSUApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
         '/signup': (context) => const SignupScreen(),
         '/change-password': (context) => const ChangePasswordScreen(username: 'admin'),
         '/change-username': (context) => const ChangeUsernameScreen(currentUsername: 'admin'),
+        '/admin-login': (context) => const AdminLoginScreen(),
+        '/admin-dashboard': (context) => const AdminDashboardScreen(),
       },
     );
   }

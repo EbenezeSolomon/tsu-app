@@ -7,9 +7,11 @@ import 'biometric_attendance_screen.dart';
 import 'attendance_log_screen.dart';
 import 'course_management_screen.dart';
 import 'analytics_screen.dart';
+import 'exam_attendance_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final String lecturerUsername;
+  const DashboardScreen({super.key, required this.lecturerUsername});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -133,6 +135,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const AnalyticsScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildDashboardButton(
+                    context,
+                    icon: Icons.verified_user,
+                    label: 'Exam Biometric Attendance',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExamAttendanceScreen(lecturerUsername: widget.lecturerUsername),
+                        ),
                       );
                     },
                   ),
