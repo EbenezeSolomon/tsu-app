@@ -138,25 +138,36 @@ class _BiometricAttendanceScreenState extends State<BiometricAttendanceScreen> w
                 builder: (context, child) {
                   return Transform.scale(
                     scale: _scanning ? _scaleAnim.value : 1,
-                    child: Container(
-                      padding: const EdgeInsets.all(32),
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.black54 : Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            blurRadius: 24,
-                            offset: const Offset(0, 8),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(32),
+                          decoration: BoxDecoration(
+                            color: isDark ? Colors.black54 : Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.15),
+                                blurRadius: 24,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/fingerprint.svg',
-                        width: 96,
-                        height: 96,
-                        color: isDark ? Colors.white : Colors.deepPurple,
-                      ),
+                          child: SvgPicture.asset(
+                            'assets/fingerprint.svg',
+                            width: 96,
+                            height: 96,
+                            color: isDark ? Colors.white : Colors.deepPurple,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          _scanning
+                              ? 'Place your finger on the sensor...'
+                              : 'Tap below to verify with fingerprint',
+                          style: GoogleFonts.poppins(fontSize: 16),
+                        ),
+                      ],
                     ),
                   );
                 },

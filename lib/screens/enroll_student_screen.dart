@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 
 import '../models/models.dart';
 
@@ -19,8 +20,36 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
   final _levelController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
+  final LocalAuthentication auth = LocalAuthentication();
+  bool _fingerprintVerified = false;
+
+  Future<void> _verifyFingerprint() async {
+    try {
+      bool authenticated = await auth.authenticate(
+        localizedReason: 'Scan your fingerprint to enroll student',
+      );
+      setState(() {
+        _fingerprintVerified = authenticated;
+      });
+      if (!authenticated) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Fingerprint verification failed.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: \\${e.toString()}')),
+      );
+    }
+  }
 
   void _enrollStudent() async {
+    if (!_fingerprintVerified) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please verify fingerprint before enrolling.')),
+      );
+      return;
+    }
     if (_formKey.currentState!.validate()) {
       final student = Student(
         studentId: _studentIdController.text,
@@ -102,6 +131,29 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                 controller: _emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) => value!.isEmpty ? 'Enter email' : null,
+              ),
+              const SizedBox(height: 24),
+              Column(
+                children: [
+                  Icon(
+                    Icons.fingerprint,
+                    size: 64,
+                    color: _fingerprintVerified ? Colors.green : Colors.grey,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _fingerprintVerified
+                        ? 'Fingerprint verified!'
+                        : 'Tap below to verify fingerprint',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton.icon(
+                    onPressed: _verifyFingerprint,
+                    icon: const Icon(Icons.fingerprint),
+                    label: const Text('Verify Fingerprint'),
+                  ),
+                ],
               ),
               const SizedBox(height: 24),
               ElevatedButton(
