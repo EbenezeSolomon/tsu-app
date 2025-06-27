@@ -1,5 +1,7 @@
-package com.example.tsu_app
+package com.example.tsu_app // <-- use your actual package name
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity : FlutterActivity()
+class MainActivity: FlutterFragmentActivity() {
+    // Leave empty unless you have custom code
+}
