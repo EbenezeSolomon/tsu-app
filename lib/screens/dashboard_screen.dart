@@ -19,90 +19,148 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lecturer Dashboard')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const EnrollStudentScreen()),
-                );
-              },
-              child: const Text('Enroll Student'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CourseManagementScreen()),
-                );
-              },
-              child: const Text('Manage Courses'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AttendanceLogScreen()),
-                );
-              },
-              child: const Text('View Attendance Logs'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                // Select course first
-                final courseBox = Hive.box<Course>('courses');
-                final courses = courseBox.values.toList();
-                Course? selectedCourse = await showDialog<Course>(
-                  context: context,
-                  builder: (context) => SimpleDialog(
-                    title: const Text('Select Course'),
-                    children: courses.isEmpty
-                        ? [const Padding(padding: EdgeInsets.all(16), child: Text('No courses available.'))]
-                        : courses.map((c) => SimpleDialogOption(
-                              onPressed: () => Navigator.pop(context, c),
-                              child: Text('${c.courseName} (${c.courseCode})'),
-                            )).toList(),
-                  ),
-                );
-                if (selectedCourse == null) return;
-                // Then select student
-                final selectedStudent = await Navigator.push<Student>(
-                  context,
-                  MaterialPageRoute(builder: (context) => const StudentManagementScreen()),
-                );
-                if (selectedStudent != null) {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BiometricAttendanceScreen(
-                        student: selectedStudent,
-                        course: selectedCourse,
-                      ),
-                    ),
-                  );
-                }
-              },
-              child: const Text('Mark Attendance for Student'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AnalyticsScreen()),
-                );
-              },
-              child: const Text('View Analytics'),
-            ),
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0F2027), Color(0xFF2C5364)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
+        child: Center(
+          child: Card(
+            elevation: 8,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset('assets/Logo.png', height: 80),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Taraba State University',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Lecturer Dashboard',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 32),
+                  _buildDashboardButton(
+                    context,
+                    icon: Icons.person_add_alt_1,
+                    label: 'Enroll Student',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const EnrollStudentScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildDashboardButton(
+                    context,
+                    icon: Icons.menu_book,
+                    label: 'Manage Courses',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CourseManagementScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildDashboardButton(
+                    context,
+                    icon: Icons.list_alt,
+                    label: 'View Attendance Logs',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AttendanceLogScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildDashboardButton(
+                    context,
+                    icon: Icons.fingerprint,
+                    label: 'Biometric Attendance',
+                    onTap: () async {
+                      // Select course first
+                      final courseBox = Hive.box<Course>('courses');
+                      final courses = courseBox.values.toList();
+                      Course? selectedCourse = await showDialog<Course>(
+                        context: context,
+                        builder: (context) => SimpleDialog(
+                          title: const Text('Select Course'),
+                          children: courses.isEmpty
+                              ? [const Padding(padding: EdgeInsets.all(16), child: Text('No courses available.'))]
+                              : courses.map((c) => SimpleDialogOption(
+                                    onPressed: () => Navigator.pop(context, c),
+                                    child: Text('${c.courseName} (${c.courseCode})'),
+                                  )).toList(),
+                        ),
+                      );
+                      if (selectedCourse == null) return;
+                      // Then select student
+                      final selectedStudent = await Navigator.push<Student>(
+                        context,
+                        MaterialPageRoute(builder: (context) => const StudentManagementScreen()),
+                      );
+                      if (selectedStudent != null) {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BiometricAttendanceScreen(
+                              student: selectedStudent,
+                              course: selectedCourse,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildDashboardButton(
+                    context,
+                    icon: Icons.analytics,
+                    label: 'Analytics',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AnalyticsScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDashboardButton(BuildContext context, {required IconData icon, required String label, required VoidCallback onTap}) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        icon: Icon(icon, size: 24),
+        label: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          child: Text(label, style: const TextStyle(fontSize: 16)),
+        ),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          backgroundColor: const Color(0xFF2C5364),
+          foregroundColor: Colors.white,
+          elevation: 2,
+        ),
+        onPressed: onTap,
       ),
     );
   }

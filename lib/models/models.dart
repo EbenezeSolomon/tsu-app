@@ -114,3 +114,35 @@ class AttendanceLog extends HiveObject {
     required this.verificationMethod,
   });
 }
+
+class AdminCredentials {
+  static const String _boxName = 'adminBox';
+  static const String _usernameKey = 'username';
+  static const String _passwordKey = 'password';
+
+  static Future<void> save(String username, String password) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put(_usernameKey, username);
+    await box.put(_passwordKey, password);
+  }
+
+  static Future<String?> getUsername() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get(_usernameKey) as String?;
+  }
+
+  static Future<String?> getPassword() async {
+    final box = await Hive.openBox(_boxName);
+    return box.get(_passwordKey) as String?;
+  }
+
+  static Future<void> setUsername(String username) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put(_usernameKey, username);
+  }
+
+  static Future<void> setPassword(String password) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put(_passwordKey, password);
+  }
+}

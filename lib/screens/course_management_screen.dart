@@ -47,37 +47,80 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
   Widget build(BuildContext context) {
     final courses = courseBox.values.toList();
     return Scaffold(
-      appBar: AppBar(title: const Text('Course Management')),
-      body: courses.isEmpty
-          ? const Center(child: Text('No courses yet.'))
-          : ListView.separated(
-              itemCount: courses.length,
-              separatorBuilder: (_, __) => const Divider(),
-              itemBuilder: (context, index) {
-                final c = courses[index];
-                return ListTile(
-                  title: Text('${c.courseName} (${c.courseCode})'),
-                  subtitle: Text('${c.department} - ${c.unit}'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _addOrEditCourse(course: c, key: c.courseCode),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteCourse(c.courseCode),
-                      ),
-                    ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0F2027), Color(0xFF2C5364)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: Card(
+            elevation: 8,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset('assets/Logo.png', height: 60),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Course Management',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                   ),
-                );
-              },
+                  const SizedBox(height: 16),
+                  courses.isEmpty
+                      ? const Center(child: Text('No courses yet.'))
+                      : SizedBox(
+                          height: 350,
+                          child: ListView.separated(
+                            itemCount: courses.length,
+                            separatorBuilder: (_, __) => const Divider(),
+                            itemBuilder: (context, index) {
+                              final c = courses[index];
+                              return ListTile(
+                                title: Text('${c.courseName} (${c.courseCode})'),
+                                subtitle: Text('${c.department} - ${c.unit}'),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit, color: Colors.blue),
+                                      onPressed: () => _addOrEditCourse(course: c, key: c.courseCode),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red),
+                                      onPressed: () => _deleteCourse(c.courseCode),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.add),
+                      label: const Text('Add Course'),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        backgroundColor: const Color(0xFF2C5364),
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size.fromHeight(48),
+                      ),
+                      onPressed: () => _addOrEditCourse(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _addOrEditCourse(),
-        child: const Icon(Icons.add),
-        tooltip: 'Add Course',
+          ),
+        ),
       ),
     );
   }

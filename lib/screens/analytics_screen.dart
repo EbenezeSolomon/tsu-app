@@ -31,22 +31,47 @@ class AnalyticsScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Attendance Analytics')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          const Text('Attendance by Course', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          ...courses.map((c) => ListTile(
-                title: Text('${c.courseName} (${c.courseCode})'),
-                trailing: Text('${courseAttendance[c.courseCode] ?? 0}'),
-              )),
-          const Divider(),
-          const Text('Attendance by Student', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          ...students.map((s) => ListTile(
-                title: Text('${s.name} (${s.studentId})'),
-                trailing: Text('${studentAttendance[s.studentId] ?? 0}'),
-              )),
-        ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0F2027), Color(0xFF2C5364)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: Card(
+            elevation: 8,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset('assets/Logo.png', height: 60),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Attendance Analytics',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Attendance by Course', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  ...courses.map((c) => ListTile(
+                        title: Text('${c.courseName} (${c.courseCode})'),
+                        trailing: Text('${courseAttendance[c.courseCode] ?? 0}'),
+                      )),
+                  const Divider(),
+                  const Text('Attendance by Student', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  ...students.map((s) => ListTile(
+                        title: Text('${s.name} (${s.studentId})'),
+                        trailing: Text('${studentAttendance[s.studentId] ?? 0}'),
+                      )),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
