@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Biological Science Department.',
+                    'Biological Sciences Department.',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     textAlign: TextAlign.center,
                   ),
