@@ -7,6 +7,7 @@ import 'screens/change_password_screen.dart';
 import 'screens/change_username_screen.dart';
 import 'screens/admin_login_screen.dart';
 import 'screens/admin_dashboard_screen.dart';
+import 'screens/lecturer_signup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +44,7 @@ class TSUApp extends StatelessWidget {
         '/change-username': (context) => const ChangeUsernameScreen(currentUsername: 'admin'),
         '/admin-login': (context) => const AdminLoginScreen(),
         '/admin-dashboard': (context) => const AdminDashboardScreen(),
+        '/lecturer-signup': (context) => const LecturerSignupScreen(),
       },
     );
   }

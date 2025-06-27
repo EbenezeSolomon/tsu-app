@@ -97,18 +97,55 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(_error!, style: const TextStyle(color: Colors.red)),
                   ],
                   const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.login),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        backgroundColor: Color(0xFF4B79A1),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.login),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            backgroundColor: Color(0xFF4B79A1),
+                          ),
+                          onPressed: _login,
+                          label: const Text('Lecturer Login', style: TextStyle(fontSize: 16)),
+                        ),
                       ),
-                      onPressed: _login,
-                      label: const Text('Login', style: TextStyle(fontSize: 16)),
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.admin_panel_settings),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            backgroundColor: Color(0xFF2C5364),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/admin-login');
+                          },
+                          label: const Text('Admin Login', style: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.person_add),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            backgroundColor: Color(0xFF2C5364),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/lecturer-signup');
+                          },
+                          label: const Text('Lecturer Sign Up', style: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   Row(
@@ -145,13 +182,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Text('Change Username'),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/admin-login');
-                    },
-                    child: const Text('Login as Admin'),
                   ),
                 ],
               ),

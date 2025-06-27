@@ -92,7 +92,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     icon: Icons.fingerprint,
                     label: 'Biometric Attendance',
                     onTap: () async {
-                      // Select course first
                       final courseBox = Hive.box<Course>('courses');
                       final courses = courseBox.values.toList();
                       Course? selectedCourse = await showDialog<Course>(
@@ -108,22 +107,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       );
                       if (selectedCourse == null) return;
-                      // Then select student
-                      final selectedStudent = await Navigator.push<Student>(
+                      await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const StudentManagementScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => BiometricAttendanceScreen(course: selectedCourse),
+                        ),
                       );
-                      if (selectedStudent != null) {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BiometricAttendanceScreen(
-                              student: selectedStudent,
-                              course: selectedCourse,
-                            ),
-                          ),
-                        );
-                      }
                     },
                   ),
                   const SizedBox(height: 16),
